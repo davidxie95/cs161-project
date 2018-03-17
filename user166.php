@@ -153,7 +153,7 @@ function main()
        LINES TERMINATED BY '\n' 
        IGNORE 1 LINES;";
        
-    $sql="DELETE FROM price WHERE Date<'20161010'";
+   // $sql="DELETE FROM price WHERE Date<'20161010'";
        
 //         echo '<pre>';
 //         print_r($csv);
