@@ -159,9 +159,9 @@ function main()
 //         print_r($csv);
 //         echo '</pre>';
        
+     $sql="CREATE TABLE PriceData(Date Date, AvgPrice INT(4),CPrice INt(4),Volumn INt(4),MCap INt(4)) ENGINE MyISAM;";
+     $sql= "INSERT INTO PriceData(Date,AvgPrice,CPrice,Volumn,MCap) SELECT Date,(HPrice+LPrice)/2,CPrice,Volumn,MCap FROM price";
        
-//$sql = "INSERT INTO price(Date, OPrice,HPrice,LPrice,CPrice,Volumn,MCap)
-//VALUES (20160304, 11231, 11578,1121,123242,56576,678854);";
 
 if ($conn->multi_query($sql)===TRUE) {
     echo "New records created successfully in the database.";
