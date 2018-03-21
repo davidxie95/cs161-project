@@ -1,13 +1,12 @@
+<?php 
 
-<?php
-$dbhandle = new mysqli("localhost", "root", "", "cryptocurrency" );
-$dbhandle->connect_error;
+$dbhandle = new mysqli('localhost','root','','cryptocurrency');
+echo $dbhandle->connect_error;
 
-$query = "SELECT high, low from BITCOIN";
+$query = "SELECT high, low FROM bitcoin group by high";
 $res = $dbhandle->query($query);
 
 ?>
-
 
 <html>
   <head>
@@ -17,22 +16,22 @@ $res = $dbhandle->query($query);
       google.charts.setOnLoadCallback(drawChart);
 
       function drawChart() {
-		  
         var data = google.visualization.arrayToDataTable([
-          ['high', 'low'],
-			<?php 
+          ['High', 'Low'],
+          <?php 
 			while($row=$res->fetch_assoc())
 			{
 				echo "['".$row['high']."',".$row['low']."],";
 			}
 
-			?>
+          ?>
+   
         ]);
 
         var options = {
-          title: 'high vs low',
-          hAxis: {title: 'high', minValue: 0, maxValue: 15},
-          vAxis: {title: 'low', minValue: 0, maxValue: 15},
+          title: 'High vs. Low comparison',
+		  hAxis: {title: 'High'},
+          vAxis: {title: 'Low'},
           legend: 'none'
         };
 
