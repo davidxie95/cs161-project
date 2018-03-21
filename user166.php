@@ -96,7 +96,6 @@ function SessionValid(){
     } 
     return true; 
 }
-
 	echo "</table>";
  
 // Function submit the input file
@@ -126,7 +125,6 @@ function main()
        echo "<br>";
        
        //echo $line = file_get_contents($_FILES["fileToUpload"]["tmp_name"]);
-
        
        //$csv = array_map('str_getcsv', file($name));
        $csv = array_map('str_getcsv', file('test.csv'));
@@ -135,7 +133,6 @@ function main()
         });
        array_shift($csv); # remove column header
       
-
 //         echo '<pre>';
 //         print_r($csv);
 //         echo '</pre>';
@@ -145,30 +142,32 @@ function main()
 	$conn =new mysqli($hn, $un, $pw, $db);
 	if($conn->connect_error) die($conn->connect_error);
        
-       // insert csv file to databse
+
+       
+        //insert csv file to databse
        $sql = "LOAD DATA LOCAL INFILE 'test.csv'
-       INTO TABLE test166.price
+       INTO TABLE test.price
        FIELDS TERMINATED BY ','
        OPTIONALLY ENCLOSED BY '\"' 
        LINES TERMINATED BY '\n' 
        IGNORE 1 LINES;";
        
-     $sql="DELETE FROM price WHERE Date<'20161010'";
+       
+       
+     $sql="DELETE FROM test.price WHERE Date<'20161010'";
        
 //         echo '<pre>';
 //         print_r($csv);
 //         echo '</pre>';
        
-     $sql="CREATE TABLE PriceData(Date Date, AvgPrice INT(4),CPrice INt(4),Volumn INt(4),MCap INt(4)) ENGINE MyISAM;";
-     $sql= "INSERT INTO PriceData(Date,AvgPrice,CPrice,Volumn,MCap) SELECT Date,(HPrice+LPrice)/2,CPrice,Volumn,MCap FROM price";
+     
+      $sql= "INSERT INTO test.PriceData(Date,AvgPrice,Volume,MCap) SELECT Date,(HPrice+LPrice)/2,Volume,MCap FROM test.price";
        
-
 if ($conn->multi_query($sql)===TRUE) {
     echo "New records created successfully in the database.";
 } else {
     echo "Error: " . $sql . "<br>" . mysqli_error($conn);
 }
-
 mysqli_close($conn);
  
        
@@ -177,7 +176,6 @@ mysqli_close($conn);
 }
     
  
-
     
   
 echo "<br>";
@@ -192,7 +190,6 @@ function checker(){
        echo "Please select a data file to upload!!";
        return false;
    }
-
     
    return true;
 }
