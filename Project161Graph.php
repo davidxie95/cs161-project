@@ -251,16 +251,7 @@ function main()
        array_shift($csv); # remove column header
        
        
-        
-       
-       
-   
-	require_once 'login166.php';
-	$conn =new mysqli($hn, $un, $pw, $db);
-	if($conn->connect_error) die($conn->connect_error);
-       
-
-       
+ 
        
       // insert csv file to databse
        $sql = "LOAD DATA LOCAL INFILE 'test.csv'
@@ -284,13 +275,7 @@ function main()
          
 //      $sql= "INSERT INTO test.pricedata(Date,AvgPrice,Volume,MCap) SELECT Date,(HPrice+LPrice)/2,Volume,MCap FROM test.price";
 //       
-if ($conn->multi_query($sql)===TRUE) {
-    echo "New records created successfully in the database.";
-} else {
-    echo "Error: " . $sql . "<br>" . mysqli_error($conn);
-}
-mysqli_close($conn);
- 
+
        
        
    }
