@@ -10,7 +10,7 @@ foreach ($_POST['Currency'] as $select)
 echo "<span><b>".$select."</b></span><br/>";
 }
 }
-else { echo "<span>Please Select Atleast One Currency.</span><br/>";}
+else { echo "<span>Done.</span><br/>";}
 }
 
 ?>
