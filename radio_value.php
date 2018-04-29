@@ -4,7 +4,7 @@ if(isset($_POST['radio']))
 {
 echo "<span>You have selected :<b> ".$_POST['radio']."</b></span><br/>";
 }
-else{ echo "<span>Please choose any radio button.</span>";}
+else{ echo "<span>Done.</span>";}
 }
 ?>
 
