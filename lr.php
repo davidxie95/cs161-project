@@ -1,13 +1,34 @@
 <?php
 $dbhandle = new mysqli('localhost', 'root', '', 'cryptocurrency');
 echo $dbhandle->connect_error;
-$query = "SELECT high, low FROM bitcoin group by high";
-$res = $dbhandle->query($query);
-if (isset($_POST['sub'])) {
-
-    $csv->import($_FILES['file']['tmp_name']);
+$yaxis = (isset($_GET['Yaxis']) ? $_GET['Yaxis'] : null);
+$xaxis = (isset($_GET['Xaxis']) ? $_GET['Xaxis'] : null);
+if ($yaxis == "Bitcoin") {
+    if ($xaxis == "Litecoin") {
+        $query = "SELECT bitcoin.high, litecoin.open from bitcoin, litecoin where bitcoin.id = litecoin.id and bitcoin.date > '2017-01-01' group by bitcoin.high";
+    } else if ($xaxis == "Ethereum") {
+        $query2 = "SELECT low from bitcoin group by high";
+    }
 }
+if ($yaxis == "Litecoin") {
+    $query = "SELECT high from bitcoin group by high";
+    if ($xaxis == "Bitcoin") {
+        $query2 = "SELECT low from bitcoin group by high";
+    } else if ($xaxis == "Ethereum") {
+        $query2 = "SELECT low from bitcoin group by high";
+    }
+}
+if ($yaxis == "Ethereum") {
+    $query = "SELECT high from bitcoin group by high";
+    if ($xaxis == "Bitcoin") {
+        $query2 = "SELECT low from bitcoin group by high";
+    } else if ($xaxis == "Litecoin") {
+        $query2 = "SELECT low from bitcoin group by high";
+    }
+}
+$res1 = $dbhandle->query($query);
 ?>
+
 <!doctype html>
 <html lang="en">
     <head>
@@ -88,6 +109,7 @@ if (isset($_POST['sub'])) {
                         </div>
                         <input name="submit" type="submit" class="btn btn-primary btn-block te" value="Show Chart">
                     </form>
+                    <div id="chart_div" style="width: 1200px; height: 500px;"></div>
                 </main>
             </div>
         </div>    
@@ -95,4 +117,35 @@ if (isset($_POST['sub'])) {
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+        
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript">
+            google.charts.load('current', {'packages': ['corechart']});
+            google.charts.setOnLoadCallback(drawChart);
+            function drawChart() {
+                var data = google.visualization.arrayToDataTable([
+                    ['High', '(High, Low)'],
+<?php
+while ($row = $res1->fetch_assoc()) {
+    echo "[" . $row['high'] . ", " . $row['open'] . "],";
+}
+?>
+                ]);
+                var options = {
+                    chartArea: {
+                        backgroundColor: {
+                            stroke: '#1E90FF',
+                            strokeWidth: 1
+                        }
+                    },
+                    title: 'High vs. Low comparison',
+                    hAxis: {title: 'High'},
+                    vAxis: {title: 'Low'},
+                    legend: 'none',
+                    trendlines: { 0: {} }
+                };
+                var chart = new google.visualization.ScatterChart(document.getElementById('chart_div'));
+                chart.draw(data, options);
+            }
+        </script>
     </body>
