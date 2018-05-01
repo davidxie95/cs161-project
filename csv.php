@@ -16,7 +16,7 @@ class csv extends mysqli
 		while($row = fgetcsv($file)){
 			
 			$value = "'" . implode("','", $row) . "'";
-			$q = "INSERT INTO BITCOIN(date,open,high,low,close,volume,marketcap) VALUES(". $value .")";
+			$q = "INSERT INTO ethereum(date,open,high,low,close,volume,marketcap) VALUES(". $value .")";
 
 		
 			if ($this->query($q)){

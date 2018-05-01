@@ -2,7 +2,7 @@
 
 $db = mysqli_connect("localhost", "root", "", "cryptocurrency") or die(msql_error());
 
-$createBitcoinTable = "CREATE TABLE IF NOT EXISTS BITCOIN(ID INTEGER PRIMARY KEY AUTO_INCREMENT, 
+$createBitcoinTable = "CREATE TABLE IF NOT EXISTS ethereum(ID INTEGER PRIMARY KEY AUTO_INCREMENT, 
 DATE VARCHAR(64), OPEN DOUBLE,
 HIGH DOUBLE,LOW DOUBLE,CLOSE DOUBLE,
 VOLUME VARCHAR(64), MARKETCAP VARCHAR(64)
