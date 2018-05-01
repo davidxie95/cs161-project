@@ -8,8 +8,8 @@ echo $dbhandle->connect_error;
 
 // change start and end date for GUI
 
-$startDate = '2017-02-01';
-$endDate = '2017-03-01';
+$startDate = '2018-01-01';
+$endDate = '2018-02-01';
 $tableName = 'bitcoin';
 
 $query3 = "SELECT open FROM $tableName WHERE 
@@ -45,7 +45,7 @@ echo "Average change per day during the month is: "
 //estimate value = current price + (cValue * trend * ratio)
 //cValue = price difference in 24hr
 //trend = positive or negative gain
-//ratio = based on mean and variance
+//ratio = TBE
 
 $cValue = $temp_array[0] - $temp_array[1];
 //if sum of percentage change is >5% for the last 7 days, 
@@ -56,16 +56,17 @@ $sum =0;
 for ($j = 0; $j < 7; $j++){
 	$sum += $percent_array[$j];
 }
-//echo $sum."<br>";
 
-if ($sum >=0){
+if ($sum >=5){
 	$trend = 1;
 }else{
 	$trend = -1;
 }
+//echo "The sum of change in precentage is ".$sum."<br>";
 
-
+//Ratio = TBE
 $ratio = 1.0;
+
 
 //echo $ratio."<br>";
 
