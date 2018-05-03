@@ -5,28 +5,26 @@ $yaxis = (isset($_GET['Yaxis']) ? $_GET['Yaxis'] : null);
 $xaxis = (isset($_GET['Xaxis']) ? $_GET['Xaxis'] : null);
 if ($yaxis == "Bitcoin") {
     if ($xaxis == "Litecoin") {
-        $query = "SELECT bitcoin.high, litecoin.open from bitcoin, litecoin where bitcoin.id = litecoin.id and bitcoin.date > '2017-01-01' group by bitcoin.high";
+        $query = "SELECT bitcoin.open, litecoin.close from bitcoin, litecoin where bitcoin.id = litecoin.id and bitcoin.date > '2017-02-01' group by bitcoin.open";
     } else if ($xaxis == "Ethereum") {
-        $query2 = "SELECT low from bitcoin group by high";
+        $query = "SELECT bitcoin.open, ethereum.close from bitcoin, ethereum where bitcoin.id = ethereum.id and bitcoin.date > '2017-02-01' group by bitcoin.open";
     }
 }
 if ($yaxis == "Litecoin") {
-    $query = "SELECT high from bitcoin group by high";
     if ($xaxis == "Bitcoin") {
-        $query2 = "SELECT low from bitcoin group by high";
+        $query = "SELECT litecoin.open, bitcoin.close from litecoin, bitcoin where litecoin.id = bitcoin.id and litecoin.date > '2017-02-01' group by litecoin.open";
     } else if ($xaxis == "Ethereum") {
-        $query2 = "SELECT low from bitcoin group by high";
+        $query = "SELECT litecoin.open, ethereum.close from litecoin, ethereum where litecoin.id = ethereum.id and litecoin.date > '2017-02-01' group by litecoin.open";
     }
 }
 if ($yaxis == "Ethereum") {
-    $query = "SELECT high from bitcoin group by high";
     if ($xaxis == "Bitcoin") {
-        $query2 = "SELECT low from bitcoin group by high";
+        $query = "SELECT ethereum.open, bitcoin.close from ethereum, bitcoin where ethereum.id = bitcoin.id and ethereum.date > '2017-02-01' group by ethereum.open";
     } else if ($xaxis == "Litecoin") {
-        $query2 = "SELECT low from bitcoin group by high";
+        $query = "SELECT ethereum.open, litecoin.close from ethereum, litecoin where ethereum.id = litecoin.id and ethereum.date > '2017-02-01' group by ethereum.open";
     }
 }
-$res1 = $dbhandle->query($query);
+$res = $dbhandle->query($query);
 ?>
 
 <!doctype html>
@@ -70,7 +68,7 @@ $res1 = $dbhandle->query($query);
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="var.html">
+                                <a class="nav-link" href="var.php">
                                     <span data-feather="file"></span>
                                     Value at Risk
                                 </a>
@@ -80,7 +78,7 @@ $res1 = $dbhandle->query($query);
                 </nav>
                 <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
                     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                        <h1 class="h2">LINEAR REGRESSION (price vs. price)</h1>
+                        <h1 class="h2">LINEAR REGRESSION (open vs. close price)</h1>
                     </div>
                     <form role="form" action="lr.php">
                         <div class="row">
@@ -124,12 +122,12 @@ $res1 = $dbhandle->query($query);
             google.charts.setOnLoadCallback(drawChart);
             function drawChart() {
                 var data = google.visualization.arrayToDataTable([
-                    ['High', '(High, Low)'],
-<?php
-while ($row = $res1->fetch_assoc()) {
-    echo "[" . $row['high'] . ", " . $row['open'] . "],";
-}
-?>
+                    ['High', '(Open, Close)'],
+					<?php
+						while ($row = $res->fetch_assoc()) {
+							echo "[" . $row['open'] . ", " . $row['close'] . "],";
+						}
+					?>
                 ]);
                 var options = {
                     chartArea: {
@@ -138,11 +136,15 @@ while ($row = $res1->fetch_assoc()) {
                             strokeWidth: 1
                         }
                     },
-                    title: 'High vs. Low comparison',
-                    hAxis: {title: 'High'},
-                    vAxis: {title: 'Low'},
+                    title: 'Open vs. Close comparison',
+                    hAxis: {title: <?php echo "'".$_GET['Yaxis']."'"; ?>},
+                    vAxis: {title: <?php echo "'".$_GET['Xaxis']."'"; ?>},
                     legend: 'none',
-                    trendlines: { 0: {} }
+                    trendlines: { 0: {
+                        color: 'purple',
+                        lineWidth: 5,
+                        opacity: 0.2,
+                    } }
                 };
                 var chart = new google.visualization.ScatterChart(document.getElementById('chart_div'));
                 chart.draw(data, options);

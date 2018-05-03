@@ -1,8 +1,6 @@
 <?php
 $dbhandle = new mysqli('localhost', 'root', '', 'cryptocurrency');
 echo $dbhandle->connect_error;
-$query = "SELECT high, low FROM bitcoin group by high";
-$res = $dbhandle->query($query);
 if (isset($_POST['sub'])) {
 
     $csv->import($_FILES['file']['tmp_name']);
@@ -49,7 +47,7 @@ if (isset($_POST['sub'])) {
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="var.html">
+                                <a class="nav-link" href="var.php">
                                     <span data-feather="file"></span>
                                     Value at Risk
                                 </a>
@@ -59,7 +57,7 @@ if (isset($_POST['sub'])) {
                 </nav>
                 <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
                     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                        <h1 class="h2">LINEAR REGRESSION (price vs. price)</h1>
+                        <h1 class="h2">LINEAR REGRESSION (open vs. close price)</h1>
                     </div>
                     <form role="form" action="lr.php">
                         <div class="row">

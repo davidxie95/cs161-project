@@ -4,17 +4,17 @@ $db = mysqli_connect("localhost", "root", "", "cryptocurrency") or die(msql_erro
 $createBitcoinTable = "CREATE TABLE IF NOT EXISTS BITCOIN(ID INTEGER PRIMARY KEY AUTO_INCREMENT, 
 DATE VARCHAR(64), OPEN DOUBLE,
 HIGH DOUBLE,LOW DOUBLE,CLOSE DOUBLE,
-VOLUME VARCHAR(64), MARKETCAP VARCHAR(64)
+VOLUME VARCHAR(64), MARKETCAP VARCHAR(64), PCHANGE DOUBLE
 )";
 $createLitecoinTable = "CREATE TABLE IF NOT EXISTS LITECOIN(ID INTEGER PRIMARY KEY AUTO_INCREMENT, 
 DATE VARCHAR(64), OPEN DOUBLE,
 HIGH DOUBLE,LOW DOUBLE,CLOSE DOUBLE,
-VOLUME VARCHAR(64), MARKETCAP VARCHAR(64)
+VOLUME VARCHAR(64), MARKETCAP VARCHAR(64), PCHANGE DOUBLE
 )";
 $createEthereumTable = "CREATE TABLE IF NOT EXISTS ETHEREUM(ID INTEGER PRIMARY KEY AUTO_INCREMENT, 
 DATE VARCHAR(64), OPEN DOUBLE,
 HIGH DOUBLE,LOW DOUBLE,CLOSE DOUBLE,
-VOLUME VARCHAR(64), MARKETCAP VARCHAR(64)
+VOLUME VARCHAR(64), MARKETCAP VARCHAR(64), PCHANGE DOUBLE
 )";
 mysqli_query($db, $createBitcoinTable);
 mysqli_query($db, $createLitecoinTable);
@@ -41,7 +41,7 @@ class csv extends mysqli {
         if ($filename == "bitcoin.csv") {
             while ($row = fgetcsv($file)) {
                 $value = "'" . implode("','", $row) . "'";
-                $q = "INSERT INTO BITCOIN(date,open,high,low,close,volume,marketcap) VALUES(" . $value . ")";
+                $q = "INSERT INTO BITCOIN(date,open,high,low,close,volume,marketcap,pchange) VALUES(" . $value . ")";
 
                 if ($this->query($q)) {
                     $this->state_csv = true;
@@ -57,7 +57,7 @@ class csv extends mysqli {
         else if ($filename == "litecoin.csv"){
                 while ($row = fgetcsv($file)) {
                 $value = "'" . implode("','", $row) . "'";
-                $q = "INSERT INTO LITECOIN(date,open,high,low,close,volume,marketcap) VALUES(" . $value . ")";
+                $q = "INSERT INTO LITECOIN(date,open,high,low,close,volume,marketcap,pchange) VALUES(" . $value . ")";
 
                 if ($this->query($q)) {
                     $this->state_csv = true;
@@ -73,7 +73,7 @@ class csv extends mysqli {
         else if ($filename == "ethereum.csv"){
                 while ($row = fgetcsv($file)) {
                 $value = "'" . implode("','", $row) . "'";
-                $q = "INSERT INTO ETHEREUM(date,open,high,low,close,volume,marketcap) VALUES(" . $value . ")";				
+                $q = "INSERT INTO ETHEREUM(date,open,high,low,close,volume,marketcap,pchange) VALUES(" . $value . ")";				
                 if ($this->query($q)) {
 					
                     $this->state_csv = true;
